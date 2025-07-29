@@ -1,0 +1,5 @@
+.git
+.vscode
+bin
+obj
+omnisharp.json
