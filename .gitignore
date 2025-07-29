@@ -1,5 +1,5 @@
-.git
-.vscode
-bin
-obj
+.git/
+.vscode/
+bin/
+obj/
 omnisharp.json
