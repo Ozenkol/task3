@@ -1,45 +1,66 @@
+using System;
+
 namespace Model;
 
 public class DiceGame
 {
-    private readonly Player firstPlayer;
-    private readonly Player secondPlayer;
+    private IPlayer? firstPlayer;
+    private IPlayer? secondPlayer;
 
+    private IPlayer? winnerPlayer;
+    private int step = 0;
     private static DiceGame? _instance;
-    private static readonly object _lock = new();
-
     private static readonly DiceStore store = DiceStore.Instance;
 
-    // Приватный конструктор
-    private DiceGame(Player p1, Player p2)
+    private DiceGame()
     {
-        firstPlayer = p1;
-        secondPlayer = p2;
+
     }
 
-    // Статическое свойство доступа
-    public static DiceGame Instance(Player p1, Player p2)
+    public static DiceGame Instance
     {
-        lock (_lock)
+        get
         {
             if (_instance == null)
             {
-                _instance = new DiceGame(p1, p2);
+                _instance = new DiceGame();
             }
             return _instance;
+
         }
     }
+
+    public void SetPlayers(IPlayer first, IPlayer second) {
+        firstPlayer = first;
+        secondPlayer = second;
+    }
+
+    public IPlayer GetWinner() {
+        return winnerPlayer;
+    }
+
 
     public bool IsFirstPlayerVirtual()
     {
         return firstPlayer is VirtualPlayer;
     }
 
-    public void InitGame()
+    public Boolean isGameOver()
     {
-        if (firstPlayer is VirtualPlayer)
+        step++;
+        if (step != 1)
         {
-            // логика для виртуального игрока
+            if (firstPlayer.GetScore() > secondPlayer.GetScore())
+            {
+                winnerPlayer = firstPlayer;
+                return true;
+            }
+            if (firstPlayer.GetScore() < secondPlayer.GetScore())
+            {
+                winnerPlayer = secondPlayer;
+                return true;
+            }
         }
+        return false;
     }
 }

@@ -2,38 +2,35 @@ using System;
 using System.Collections.Generic;
 
 namespace Model;
-public class DiceStore
+public sealed class DiceStore
 {
+
+    private DiceStore() { }
+
+    public List<Dice> _diceList = [];
+    public int DiceCount => _diceList.Count;
+
     private static DiceStore? _instance;
-    private static readonly object _lock = new();
 
     public static DiceStore Instance
-    {
-        get
         {
-            lock (_lock)
-            {
-                return _instance ??= new DiceStore();
+            get {
+                if(_instance == null)
+                {
+                    _instance = new DiceStore();
+                }
+                return _instance;
             }
-        }
-    }
 
-    private readonly List<Dice> _diceList = [];
+        }
 
     public void Init(string [] args)
         {
             foreach (string arg in args) {
-            _diceList.Add(new Dice(arg));
+                _diceList.Add(new Dice(arg));
         }
-        }
+    }
 
-    public IReadOnlyList<Dice> DiceList => _diceList.AsReadOnly();
-
-    private DiceStore() { }
-
-    public int DiceCount => _diceList.Count;
-
-    // Example getter method
     public Dice GetDiceAt(int index)
     {
         return _diceList[index];
@@ -52,10 +49,14 @@ public class DiceStore
         }
     }
 
-    public void Print() {
+    public void PrintDices() {
         foreach(Dice dice in _diceList) {
             Console.WriteLine("["+ string.Join(", ", dice.GetFaces()) + "]");
         }
+    }
+
+    public void PrintDice(int i) {
+        GetDiceAt(i).PrintFaces();
     }
 
 }

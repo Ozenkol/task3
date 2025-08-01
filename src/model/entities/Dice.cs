@@ -2,7 +2,7 @@ namespace Model;
 
 public class Dice(string input)
 {
-    private int die = 0;
+    private int die;
     private readonly int[] faces = input.Split(',')
             .Select(s => int.Parse(s))
             .ToArray();

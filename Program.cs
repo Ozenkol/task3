@@ -15,11 +15,11 @@ namespace app
         {
             controller.ValidateArgs(args);
             store.Init(args);
-            store.Print();
             view.WelcomeView();
             view.SecretWordView();
             view.FirstMoveView();
             view.DiceChooseView();
+            view.DiceGameView();
         }
     }
 }

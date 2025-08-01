@@ -1,4 +1,6 @@
 namespace View;
+
+using System.Reflection.Emit;
 using Controller;
 using Model;
 
@@ -55,21 +57,129 @@ class ConsoleView
     }
 
     public void DiceChooseView() {
-        var game = Model.DiceGame.Instance;
-        if(game.IsFirstPlayerVirtual()) {
-            
+        if(Model.DiceGame.Instance.IsFirstPlayerVirtual()) {
+            Model.VirtualPlayer.GetInstance().SetDice();
+            Console.WriteLine("I make the first move and choose the " + Model.VirtualPlayer.GetInstance().GetDiceString() + " dice");
+            Console.WriteLine("Now your turn select dice");
+            Console.WriteLine("Choose your dice:");
+            for (int i = 0; i < Model.DiceStore.Instance.DiceCount; i++)
+            {
+                Console.Write(i + " ");
+                Model.DiceStore.Instance.PrintDice(i);
+                Console.WriteLine();
+            }
+            Console.WriteLine("Your selection");
+            string dice = Console.ReadLine();
+            Controller.SetDice(dice);
         }
-        Console.WriteLine("");
-        for (int i = 0; i < store.DiceCount; i++)
-        {
-            store.GetDiceAt(i).PrintFaces();
-            Console.WriteLine(i);
+        else {
+            Console.WriteLine("You make first move, choose dice");
+            for (int i = 0; i < Model.DiceStore.Instance.DiceCount; i++)
+            {
+                Console.Write(i + " ");
+                Model.DiceStore.Instance.PrintDice(i);
+                Console.WriteLine();
+            }
+            string dice = Console.ReadLine();
+            Controller.SetDice(dice);
+            Model.VirtualPlayer.GetInstance().SetDice();
+        }
+
+    }
+
+    public void DiceGameView() {
+        while(!Model.DiceGame.Instance.isGameOver()) {
+            if (Model.DiceGame.Instance.IsFirstPlayerVirtual()) {
+                Console.WriteLine("It's time for my roll.");
+                Controller.SetComputerChoice();
+                Console.WriteLine("I selected a random value in the range 0..5 ");
+                Console.WriteLine("0 - 0");
+                Console.WriteLine("1 - 1");
+                Console.WriteLine("2 - 2");
+                Console.WriteLine("3 - 3");
+                Console.WriteLine("4 - 4");
+                Console.WriteLine("5 - 5");
+                Console.WriteLine("X - exit");
+                Console.WriteLine("? - Help");
+                Console.Write("Your selection: ");
+                string userChoice = Console.ReadLine();
+                Controller.SetUserChoice(userChoice);
+                Console.WriteLine("My number is " + Model.VirtualPlayer.GetInstance().GetComputerChoice());
+                Console.WriteLine("The fair number generation result is " + userChoice + " + " + Model.VirtualPlayer.GetInstance().GetComputerChoice() + " = " +  + Model.VirtualPlayer.GetInstance().GetFairNumber() + " (mod 6)");
+                VirtualPlayer.GetInstance().RollDice();
+                Console.WriteLine("My roll result " + Model.VirtualPlayer.GetInstance().GetFace());
+
+                Console.WriteLine("It's time for your roll.");
+                Controller.SetComputerChoice();
+                Console.WriteLine("I selected a random value in the range 0..5 ");
+                Console.WriteLine("0 - 0");
+                Console.WriteLine("1 - 1");
+                Console.WriteLine("2 - 2");
+                Console.WriteLine("3 - 3");
+                Console.WriteLine("4 - 4");
+                Console.WriteLine("5 - 5");
+                Console.WriteLine("X - exit");
+                Console.WriteLine("? - Help");
+                Console.Write("Your selection: ");
+                userChoice = Console.ReadLine();
+                Controller.SetUserChoice(userChoice);
+                Console.WriteLine("My number is " + Model.UserPlayer.GetInstance().GetComputerChoice());
+                Console.WriteLine("The fair number generation result is " + userChoice + " + " + Model.UserPlayer.GetInstance().GetComputerChoice() + " = " +  + Model.UserPlayer.GetInstance().GetFairNumber() + " (mod 6)");
+                UserPlayer.GetInstance().RollDice();
+                Console.WriteLine("Your roll result " + Model.UserPlayer.GetInstance().GetFace());
+
+            }
+            else {
+                Console.WriteLine("It's time for my roll.");
+                Controller.SetComputerChoice();
+                Console.WriteLine("I selected a random value in the range 0..5 ");
+                Console.WriteLine("0 - 0");
+                Console.WriteLine("1 - 1");
+                Console.WriteLine("2 - 2");
+                Console.WriteLine("3 - 3");
+                Console.WriteLine("4 - 4");
+                Console.WriteLine("5 - 5");
+                Console.WriteLine("X - exit");
+                Console.WriteLine("? - Help");
+                Console.Write("Your selection: ");
+                string userChoice = Console.ReadLine();
+                Controller.SetUserChoice(userChoice);
+                Console.WriteLine("My number is " + Model.UserPlayer.GetInstance().GetComputerChoice());
+                Console.WriteLine("The fair number generation result is " + userChoice + " + " + Model.UserPlayer.GetInstance().GetComputerChoice() + " = " +  + Model.UserPlayer.GetInstance().GetFairNumber() + " (mod 6)");
+                UserPlayer.GetInstance().RollDice();
+                Console.WriteLine("My roll result " + Model.UserPlayer.GetInstance().GetFace());
+
+                Console.WriteLine("It's time for my roll.");
+                Controller.SetComputerChoice();
+                Console.WriteLine("I selected a random value in the range 0..5 ");
+                Console.WriteLine("0 - 0");
+                Console.WriteLine("1 - 1");
+                Console.WriteLine("2 - 2");
+                Console.WriteLine("3 - 3");
+                Console.WriteLine("4 - 4");
+                Console.WriteLine("5 - 5");
+                Console.WriteLine("X - exit");
+                Console.WriteLine("? - Help");
+                Console.Write("Your selection: ");
+                userChoice = Console.ReadLine();
+                Controller.SetUserChoice(userChoice);
+                Console.WriteLine("My number is " + Model.VirtualPlayer.GetInstance().GetComputerChoice());
+                Console.WriteLine("The fair number generation result is " + userChoice + " + " + Model.VirtualPlayer.GetInstance().GetComputerChoice() + " = " +  + Model.VirtualPlayer.GetInstance().GetFairNumber() + " (mod 6)");
+                VirtualPlayer.GetInstance().RollDice();
+                Console.WriteLine("My roll result " + Model.VirtualPlayer.GetInstance().GetFace());
+            }
+        }
+        if (Model.DiceGame.Instance.GetWinner() is VirtualPlayer) {
+            Console.WriteLine("I win! (" + Model.UserPlayer.GetInstance().GetScore() + " < " + Model.VirtualPlayer.GetInstance().GetScore() + ")");
+        }
+        else {
+            Console.WriteLine("You win! (" + Model.UserPlayer.GetInstance().GetScore() + " > " + Model.VirtualPlayer.GetInstance().GetScore() + ")");
         }
     }
 
 
     public void HelpView() {
-        
+        Console.WriteLine("Help");
     }
 
 }

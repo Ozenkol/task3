@@ -9,8 +9,11 @@ public class ValidationError {
         new ValidationError("Please specify at least two dice.");
 
     public static ValidationError InvalidFaceCount = 
-        new ValidationError("The dice must have 6 faces.");    
-        
+        new ValidationError("The dice must have 6 faces.");
+
+    public static ValidationError InvalidSelection =
+        new ValidationError("Please select number between 0 and 6");
+
     public override String ToString() {
         return String.Join("\n", 
             "Argument error.",

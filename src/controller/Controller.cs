@@ -1,3 +1,4 @@
+using System.Numerics;
 using Model;
 
 namespace Controller;
@@ -17,11 +18,25 @@ class Controller
     }
     public static void AddVirtualPlayerFirst()
     {
-        var game = Model.DiceGame.Instance(new VirtualPlayer(), new UserPlayer());
+        Model.DiceGame.Instance.SetPlayers(VirtualPlayer.GetInstance(), UserPlayer.GetInstance());
     }
     public static void AddUserPlayerFirst()
     {
-        var game = Model.DiceGame.Instance(new UserPlayer(), new VirtualPlayer());
+        Model.DiceGame.Instance.SetPlayers(UserPlayer.GetInstance(), VirtualPlayer.GetInstance());
+    }
+
+    public static void SetUserChoice(string arg) {
+        Model.UserPlayer.GetInstance().SetUserChoice(int.Parse(arg));
+        Model.VirtualPlayer.GetInstance().SetUserChoice(int.Parse(arg));
+    }
+     public static void SetComputerChoice()
+    {
+        Model.VirtualPlayer.GetInstance().SetComputerChoice();
+        Model.UserPlayer.GetInstance().SetComputerChoice();   
+    }
+    public static void SetDice(string i) {
+
+        Model.UserPlayer.GetInstance().SetDice(int.Parse(i));
     }
     public void ValidateArgs(string[] args)
     {
